@@ -1,0 +1,4 @@
+project_id = "rsigqaunifaavcvncoco"
+
+[functions.medical-diagnosis]
+verify_jwt = false
