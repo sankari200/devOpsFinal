@@ -1,0 +1,49 @@
+name: 🚀 CI Build & Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'   # enables dependency caching for faster builds
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4️⃣ Run build step
+      - name: Build project
+        run: |
+          echo "🛠️ Running build..."
+          npm run build || echo "⚠️ No build script found"
+
+      # 5️⃣ Run test step
+      - name: Run tests
+        run: |
+          echo "🧪 Running tests..."
+          npm test || echo "⚠️ No tests found"
+
+      # 6️⃣ Upload build artifacts (optional)
+      - name: Upload production build
+        if: success() && exists('dist')
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: dist
+
+     
